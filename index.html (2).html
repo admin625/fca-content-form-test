@@ -3,35 +3,131 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FCA Content Request - TEST</title>
+  <title>FCA Content Request</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%); min-height: 100vh; padding: 20px; }
-    .container { max-width: 600px; margin: 0 auto; }
+    .container { max-width: 700px; margin: 0 auto; }
     .test-banner { background: #f59e0b; color: #000; padding: 10px 20px; border-radius: 8px; text-align: center; margin-bottom: 20px; font-weight: 600; }
     .card { background: white; border-radius: 16px; padding: 40px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
     .header { text-align: center; margin-bottom: 30px; }
     .header h1 { color: #1e3a5f; font-size: 28px; margin-bottom: 8px; }
     .header p { color: #64748b; }
-    .form-group { margin-bottom: 24px; }
+    
+    /* Section styling */
+    .form-section { margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid #e2e8f0; }
+    .form-section:last-of-type { border-bottom: none; margin-bottom: 24px; }
+    .section-title { font-size: 18px; font-weight: 700; color: #1e3a5f; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .section-title i { color: #3b82f6; }
+    
+    .form-group { margin-bottom: 20px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } }
+    
     label { display: block; font-weight: 600; color: #1e293b; margin-bottom: 8px; }
     .required { color: #ef4444; }
-    input[type="email"], input[type="text"], textarea, select { width: 100%; padding: 14px 16px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 16px; transition: border-color 0.2s; }
+    input[type="email"], input[type="text"], input[type="url"], textarea, select { 
+      width: 100%; padding: 14px 16px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 16px; transition: border-color 0.2s; 
+    }
     input:focus, textarea:focus, select:focus { outline: none; border-color: #3b82f6; }
-    textarea { resize: vertical; min-height: 100px; }
-    .checkbox-group { display: flex; flex-wrap: wrap; gap: 12px; }
-    .checkbox-item { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 10px; cursor: pointer; transition: all 0.2s; }
-    .checkbox-item:hover { border-color: #3b82f6; background: #f8fafc; }
-    .checkbox-item.selected { border-color: #3b82f6; background: #dbeafe; }
-    .checkbox-item input { display: none; }
-    .platform-icon { font-size: 20px; }
-    button { width: 100%; padding: 16px; background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%); color: white; border: none; border-radius: 10px; font-size: 18px; font-weight: 600; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+    textarea { resize: vertical; min-height: 80px; }
+    .helper-text { font-size: 13px; color: #64748b; margin-top: 6px; }
+    
+    /* Platform selection with individual counts */
+    .platform-select-grid { display: flex; flex-direction: column; gap: 12px; }
+    .platform-select-item { 
+      border: 2px solid #e2e8f0; border-radius: 12px; 
+      padding: 16px; transition: all 0.2s; position: relative;
+      opacity: 0.6;
+    }
+    .platform-select-item.selected { 
+      border-color: #3b82f6; background: #f0f7ff; opacity: 1;
+    }
+    .platform-select-item.disabled { opacity: 0.4; cursor: not-allowed; }
+    .platform-header { 
+      display: flex; align-items: center; gap: 12px; cursor: pointer;
+    }
+    .platform-header input[type="checkbox"] { 
+      width: 20px; height: 20px; cursor: pointer; accent-color: #3b82f6;
+    }
+    .platform-icon { font-size: 24px; }
+    .platform-icon.instagram { color: #E4405F; }
+    .platform-icon.facebook { color: #1877F2; }
+    .platform-icon.linkedin { color: #0A66C2; }
+    .platform-icon.twitter { color: #000000; }
+    .platform-icon.tiktok { color: #000000; }
+    .platform-name { font-weight: 600; font-size: 16px; color: #1e293b; flex: 1; }
+    .coming-soon { 
+      background: #f59e0b; color: #000; font-size: 10px; font-weight: 700;
+      padding: 4px 10px; border-radius: 10px;
+    }
+    .post-count-selector { 
+      display: flex; align-items: center; gap: 12px; 
+      margin-top: 12px; padding-top: 12px; border-top: 1px solid #e2e8f0;
+    }
+    .count-label { font-size: 14px; color: #64748b; font-weight: 500; }
+    .count-buttons { display: flex; gap: 6px; }
+    .count-btn { 
+      width: 36px; height: 36px; border: 2px solid #e2e8f0; border-radius: 8px;
+      background: white; font-weight: 600; font-size: 14px; cursor: pointer;
+      transition: all 0.2s; color: #475569;
+    }
+    .count-btn:hover:not(:disabled) { border-color: #3b82f6; background: #f0f7ff; }
+    .count-btn.selected { 
+      border-color: #3b82f6; background: #3b82f6; color: white; 
+    }
+    .count-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    
+    /* Hide post count selector until platform is selected */
+    .platform-select-item:not(.selected) .post-count-selector { 
+      opacity: 0.4; pointer-events: none; 
+    }
+    
+    /* Toggle switch */
+    .toggle-group { display: flex; align-items: center; justify-content: space-between; padding: 16px; background: #f8fafc; border-radius: 10px; margin-bottom: 16px; }
+    .toggle-label { font-weight: 600; color: #1e293b; }
+    .toggle-description { font-size: 13px; color: #64748b; margin-top: 4px; }
+    .toggle-switch { position: relative; width: 56px; height: 30px; }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider { 
+      position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #cbd5e1; transition: 0.3s; border-radius: 30px;
+    }
+    .toggle-slider:before {
+      position: absolute; content: ""; height: 24px; width: 24px; left: 3px; bottom: 3px;
+      background-color: white; transition: 0.3s; border-radius: 50%;
+    }
+    input:checked + .toggle-slider { background-color: #3b82f6; }
+    input:checked + .toggle-slider:before { transform: translateX(26px); }
+    
+    /* Buttons */
+    button { 
+      width: 100%; padding: 16px; 
+      background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%); 
+      color: white; border: none; border-radius: 10px; font-size: 18px; font-weight: 600; 
+      cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; 
+    }
     button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4); }
     button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-    .success { background: #dcfce7; color: #166534; padding: 20px; border-radius: 10px; text-align: center; display: none; }
-    .error { background: #fee2e2; color: #dc2626; padding: 20px; border-radius: 10px; text-align: center; display: none; margin-bottom: 20px; }
-    .helper-text { font-size: 13px; color: #64748b; margin-top: 6px; }
+    .btn-secondary { 
+      background: #f1f5f9; color: #475569; margin-top: 12px; font-size: 14px; padding: 12px;
+    }
+    .btn-secondary:hover { background: #e2e8f0; box-shadow: none; transform: none; }
+    
+    .success { background: #dcfce7; color: #166534; padding: 24px; border-radius: 10px; text-align: center; display: none; }
+    .success h3 { margin-bottom: 8px; }
+    .error { background: #fee2e2; color: #dc2626; padding: 16px; border-radius: 10px; text-align: center; display: none; margin-bottom: 20px; }
     .spam-notice { background: #fef3c7; padding: 12px 16px; border-radius: 8px; font-size: 14px; color: #92400e; margin-top: 16px; text-align: center; }
+    
+    /* Saved indicator */
+    .saved-indicator { 
+      position: fixed; bottom: 20px; right: 20px; 
+      background: #10b981; color: white; padding: 10px 16px; border-radius: 8px;
+      font-size: 14px; display: none; align-items: center; gap: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .saved-indicator.show { display: flex; }
   </style>
 </head>
 <body>
@@ -47,120 +143,514 @@
       <div id="error" class="error"></div>
 
       <form id="contentForm">
-        <div class="form-group">
-          <label>Email Address <span class="required">*</span></label>
-          <input type="email" name="email" id="email" required placeholder="your@email.com">
-        </div>
-
-        <div class="form-group">
-          <label>Select Platforms <span class="required">*</span></label>
-          <div class="checkbox-group">
-            <label class="checkbox-item" data-platform="instagram">
-              <input type="checkbox" name="platforms" value="instagram">
-              <span class="platform-icon">📸</span> Instagram
-            </label>
-            <label class="checkbox-item" data-platform="facebook">
-              <input type="checkbox" name="platforms" value="facebook">
-              <span class="platform-icon">👍</span> Facebook
-            </label>
-            <label class="checkbox-item" data-platform="linkedin">
-              <input type="checkbox" name="platforms" value="linkedin">
-              <span class="platform-icon">💼</span> LinkedIn
-            </label>
-            <label class="checkbox-item" data-platform="twitter">
-              <input type="checkbox" name="platforms" value="twitter">
-              <span class="platform-icon">🐦</span> Twitter/X
-            </label>
-            <label class="checkbox-item" data-platform="tiktok">
-              <input type="checkbox" name="platforms" value="tiktok">
-              <span class="platform-icon">🎵</span> TikTok
-            </label>
+        
+        <!-- SECTION: Basic Info -->
+        <div class="form-section">
+          <h2 class="section-title"><i class="fas fa-user"></i> Your Information</h2>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label>Email Address <span class="required">*</span></label>
+              <input type="email" name="email" id="email" required placeholder="your@email.com">
+            </div>
+            <div class="form-group">
+              <label>Business Name</label>
+              <input type="text" name="businessName" id="businessName" placeholder="Your Fitness Studio">
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label>Your Name</label>
+              <input type="text" name="name" id="name" placeholder="John Smith">
+            </div>
+            <div class="form-group">
+              <label>Your Title/Role</label>
+              <input type="text" name="title" id="title" placeholder="e.g., Owner, Head Trainer">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label>Website URL</label>
+            <input type="url" name="website" id="website" placeholder="https://yourfitnessbusiness.com">
+            <p class="helper-text">We may use this to better understand your brand and services</p>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label>Instagram Handle</label>
+              <input type="text" name="instagram_handle" id="instagram_handle" placeholder="@yourhandle">
+            </div>
+            <div class="form-group">
+              <label>Location / City</label>
+              <input type="text" name="location" id="location" placeholder="e.g., Austin, TX">
+            </div>
           </div>
         </div>
 
-        <div class="form-group">
-          <label>Content Focus / Theme</label>
-          <input type="text" name="theme" id="theme" placeholder="e.g., Summer fitness motivation, Weight loss tips">
-          <p class="helper-text">Optional: Give us a specific theme or topic for this week's content</p>
+        <!-- SECTION: Platform Selection -->
+        <div class="form-section">
+          <h2 class="section-title"><i class="fas fa-share-nodes"></i> Platforms & Posts</h2>
+          
+          <label>Select Platforms & Number of Posts <span class="required">*</span></label>
+          <p class="helper-text" style="margin-bottom: 16px;">Click to select a platform, then choose how many posts you want</p>
+          
+          <div class="platform-select-grid">
+            <!-- Instagram -->
+            <div class="platform-select-item" data-platform="instagram">
+              <div class="platform-header">
+                <input type="checkbox" name="platforms" value="instagram" id="platform-instagram">
+                <i class="fab fa-instagram platform-icon instagram"></i>
+                <span class="platform-name">Instagram</span>
+              </div>
+              <div class="post-count-selector">
+                <span class="count-label">Posts:</span>
+                <div class="count-buttons">
+                  <button type="button" class="count-btn" data-count="1">1</button>
+                  <button type="button" class="count-btn selected" data-count="2">2</button>
+                  <button type="button" class="count-btn" data-count="3">3</button>
+                  <button type="button" class="count-btn" data-count="4">4</button>
+                  <button type="button" class="count-btn" data-count="5">5</button>
+                </div>
+                <input type="hidden" name="instagram_count" value="2">
+              </div>
+            </div>
+            
+            <!-- Facebook -->
+            <div class="platform-select-item" data-platform="facebook">
+              <div class="platform-header">
+                <input type="checkbox" name="platforms" value="facebook" id="platform-facebook">
+                <i class="fab fa-facebook platform-icon facebook"></i>
+                <span class="platform-name">Facebook</span>
+              </div>
+              <div class="post-count-selector">
+                <span class="count-label">Posts:</span>
+                <div class="count-buttons">
+                  <button type="button" class="count-btn" data-count="1">1</button>
+                  <button type="button" class="count-btn selected" data-count="2">2</button>
+                  <button type="button" class="count-btn" data-count="3">3</button>
+                  <button type="button" class="count-btn" data-count="4">4</button>
+                  <button type="button" class="count-btn" data-count="5">5</button>
+                </div>
+                <input type="hidden" name="facebook_count" value="2">
+              </div>
+            </div>
+            
+            <!-- LinkedIn -->
+            <div class="platform-select-item" data-platform="linkedin">
+              <div class="platform-header">
+                <input type="checkbox" name="platforms" value="linkedin" id="platform-linkedin">
+                <i class="fab fa-linkedin platform-icon linkedin"></i>
+                <span class="platform-name">LinkedIn</span>
+              </div>
+              <div class="post-count-selector">
+                <span class="count-label">Posts:</span>
+                <div class="count-buttons">
+                  <button type="button" class="count-btn" data-count="1">1</button>
+                  <button type="button" class="count-btn selected" data-count="2">2</button>
+                  <button type="button" class="count-btn" data-count="3">3</button>
+                  <button type="button" class="count-btn" data-count="4">4</button>
+                  <button type="button" class="count-btn" data-count="5">5</button>
+                </div>
+                <input type="hidden" name="linkedin_count" value="2">
+              </div>
+            </div>
+            
+            <!-- Twitter/X -->
+            <div class="platform-select-item" data-platform="twitter">
+              <div class="platform-header">
+                <input type="checkbox" name="platforms" value="twitter" id="platform-twitter">
+                <i class="fab fa-x-twitter platform-icon twitter"></i>
+                <span class="platform-name">X / Twitter</span>
+              </div>
+              <div class="post-count-selector">
+                <span class="count-label">Posts:</span>
+                <div class="count-buttons">
+                  <button type="button" class="count-btn" data-count="1">1</button>
+                  <button type="button" class="count-btn selected" data-count="2">2</button>
+                  <button type="button" class="count-btn" data-count="3">3</button>
+                  <button type="button" class="count-btn" data-count="4">4</button>
+                  <button type="button" class="count-btn" data-count="5">5</button>
+                </div>
+                <input type="hidden" name="twitter_count" value="2">
+              </div>
+            </div>
+            
+            <!-- TikTok - Coming Soon -->
+            <div class="platform-select-item disabled" data-platform="tiktok">
+              <div class="platform-header">
+                <input type="checkbox" name="platforms" value="tiktok" id="platform-tiktok" disabled>
+                <i class="fab fa-tiktok platform-icon tiktok"></i>
+                <span class="platform-name">TikTok</span>
+                <span class="coming-soon">COMING SOON</span>
+              </div>
+              <div class="post-count-selector">
+                <span class="count-label">Posts:</span>
+                <div class="count-buttons">
+                  <button type="button" class="count-btn" data-count="1" disabled>1</button>
+                  <button type="button" class="count-btn" data-count="2" disabled>2</button>
+                  <button type="button" class="count-btn" data-count="3" disabled>3</button>
+                  <button type="button" class="count-btn" data-count="4" disabled>4</button>
+                  <button type="button" class="count-btn" data-count="5" disabled>5</button>
+                </div>
+                <input type="hidden" name="tiktok_count" value="0">
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="form-group">
-          <label>Target Audience</label>
-          <select name="audience" id="audience">
-            <option value="general">General Fitness Enthusiasts</option>
-            <option value="beginners">Beginners / New to Fitness</option>
-            <option value="intermediate">Intermediate / Regular Gym-Goers</option>
-            <option value="advanced">Advanced / Athletes</option>
-            <option value="seniors">Seniors / 50+</option>
-            <option value="busy-professionals">Busy Professionals</option>
-            <option value="moms">Moms / Parents</option>
-            <option value="weight-loss">Weight Loss Focused</option>
-            <option value="muscle-building">Muscle Building / Bodybuilding</option>
-          </select>
+        <!-- SECTION: Image Preferences -->
+        <div class="form-section">
+          <h2 class="section-title"><i class="fas fa-image"></i> Image Preferences</h2>
+          
+          <div class="toggle-group">
+            <div>
+              <div class="toggle-label">Include Images with Posts</div>
+              <div class="toggle-description">We'll match your uploaded photos or generate AI images</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" name="includeImages" id="includeImages" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          
+          <div class="toggle-group">
+            <div>
+              <div class="toggle-label">Prefer My Own Photos</div>
+              <div class="toggle-description">Use photos from your uploaded library when available</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" name="preferOwnPhotos" id="preferOwnPhotos" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          
+          <p class="helper-text" style="margin-top: 8px;">
+            <i class="fas fa-info-circle"></i> 
+            Haven't uploaded photos yet? <a href="https://fca-photo-upload.netlify.app" target="_blank" style="color: #3b82f6;">Upload your brand photos here</a>
+          </p>
         </div>
 
-        <div class="form-group">
-          <label>Content Tone</label>
-          <select name="tone" id="tone">
-            <option value="motivational">Motivational & Inspiring</option>
-            <option value="educational">Educational & Informative</option>
-            <option value="casual">Casual & Friendly</option>
-            <option value="professional">Professional & Expert</option>
-            <option value="fun">Fun & Energetic</option>
-          </select>
+        <!-- SECTION: Content Details -->
+        <div class="form-section">
+          <h2 class="section-title"><i class="fas fa-pen-fancy"></i> Content Details</h2>
+          
+          <div class="form-group">
+            <label>Content Focus / Theme This Week</label>
+            <input type="text" name="theme" id="theme" placeholder="e.g., Summer fitness motivation, New program launch, Holiday specials">
+            <p class="helper-text">Give us a specific theme or topic for this batch of content</p>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label>Your Specialty / Niche</label>
+              <input type="text" name="specialty" id="specialty" placeholder="e.g., HIIT, Yoga, Strength Training">
+            </div>
+            <div class="form-group">
+              <label>Your Unique Selling Point</label>
+              <input type="text" name="usp" id="usp" placeholder="e.g., 20+ years experience, Certified nutritionist">
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label>Target Audience</label>
+              <select name="audience" id="audience">
+                <option value="general">General Fitness Enthusiasts</option>
+                <option value="beginners">Beginners / New to Fitness</option>
+                <option value="intermediate">Intermediate / Regular Gym-Goers</option>
+                <option value="advanced">Advanced / Athletes</option>
+                <option value="seniors">Seniors / 50+</option>
+                <option value="busy-professionals">Busy Professionals</option>
+                <option value="moms">Moms / Parents</option>
+                <option value="weight-loss">Weight Loss Focused</option>
+                <option value="muscle-building">Muscle Building / Bodybuilding</option>
+                <option value="youth">Youth / Teens</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Content Tone</label>
+              <select name="tone" id="tone">
+                <option value="motivational">Motivational & Inspiring</option>
+                <option value="educational">Educational & Informative</option>
+                <option value="casual">Casual & Friendly</option>
+                <option value="professional">Professional & Expert</option>
+                <option value="fun">Fun & Energetic</option>
+                <option value="empathetic">Empathetic & Supportive</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label>Services You Offer</label>
+            <input type="text" name="services" id="services" placeholder="e.g., 1-on-1 training, Group classes, Online coaching, Meal plans">
+            <p class="helper-text">List your main services so we can promote them in posts</p>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label>Call-to-Action Preference</label>
+              <select name="cta" id="cta">
+                <option value="learn-more">Learn More (Link in Bio)</option>
+                <option value="dm">DM for Info</option>
+                <option value="book">Book a Session</option>
+                <option value="free-trial">Free Trial Offer</option>
+                <option value="call">Call/Text Us</option>
+                <option value="website">Visit Website</option>
+                <option value="none">No Direct CTA</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Hashtag Style</label>
+              <select name="hashtagStyle" id="hashtagStyle">
+                <option value="moderate">Moderate (8-12 hashtags)</option>
+                <option value="minimal">Minimal (3-5 hashtags)</option>
+                <option value="heavy">Heavy (15-20 hashtags)</option>
+                <option value="none">No Hashtags</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label>Your Branded Hashtags</label>
+            <input type="text" name="brandedHashtags" id="brandedHashtags" placeholder="e.g., #YourGymName #TrainWithJohn #FitWithUs">
+            <p class="helper-text">Hashtags you always want included in your posts</p>
+          </div>
         </div>
 
-        <div class="form-group">
-          <label>Your Specialty / Niche</label>
-          <input type="text" name="specialty" id="specialty" placeholder="e.g., HIIT, Yoga, Strength Training, CrossFit">
-          <p class="helper-text">What type of fitness do you specialize in?</p>
+        <!-- SECTION: Additional Context -->
+        <div class="form-section">
+          <h2 class="section-title"><i class="fas fa-lightbulb"></i> Additional Context</h2>
+          
+          <div class="form-group">
+            <label>Current Promotions or Events</label>
+            <textarea name="promotions" id="promotions" placeholder="e.g., 20% off first month, New year challenge starting Jan 1, Free consultation this week"></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label>Topics to Avoid</label>
+            <input type="text" name="avoidTopics" id="avoidTopics" placeholder="e.g., Weight loss, Before/after photos, Specific competitors">
+            <p class="helper-text">Anything you don't want us to mention or focus on</p>
+          </div>
+          
+          <div class="form-group">
+            <label>Additional Notes or Requests</label>
+            <textarea name="notes" id="notes" placeholder="Any other specific requests, context, or information that would help us create better content for you"></textarea>
+          </div>
         </div>
 
-        <div class="form-group">
-          <label>Call-to-Action Preference</label>
-          <select name="cta" id="cta">
-            <option value="learn-more">Learn More (Link in Bio)</option>
-            <option value="dm">DM for Info</option>
-            <option value="book">Book a Session</option>
-            <option value="free-trial">Free Trial Offer</option>
-            <option value="none">No Direct CTA</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>Additional Notes</label>
-          <textarea name="notes" id="notes" placeholder="Any specific requests, promotions, or events to mention?"></textarea>
-        </div>
-
-        <button type="submit" id="submitBtn">Generate My Content 🚀</button>
+        <button type="submit" id="submitBtn">
+          <i class="fas fa-rocket"></i> Generate My Content
+        </button>
+        
+        <button type="button" class="btn-secondary" onclick="clearSavedData()">
+          <i class="fas fa-eraser"></i> Clear Saved Form Data
+        </button>
 
         <div class="spam-notice">
-          📧 Please check your <strong>spam/junk folder</strong> if you don't see our email within a few minutes!
+          <i class="fas fa-envelope"></i> Please check your <strong>spam/junk folder</strong> if you don't see our email within a few minutes!
         </div>
       </form>
 
       <div id="success" class="success">
         <h3>✅ Content Request Submitted!</h3>
-        <p>We're generating your personalized content now. Check your email in a few minutes!</p>
-        <p style="margin-top: 10px; font-size: 14px;">Don't forget to check your spam folder!</p>
+        <p>We're generating your personalized content now.</p>
+        <p style="margin-top: 12px;">Check your email in a few minutes!</p>
+        <p style="margin-top: 8px; font-size: 14px; color: #166534;">Don't forget to check your spam folder.</p>
+        <button onclick="resetForm()" style="margin-top: 20px; background: #166534;">
+          <i class="fas fa-plus"></i> Submit Another Request
+        </button>
       </div>
     </div>
   </div>
 
-  <script>
-    // CHANGE THIS TO YOUR TEST WEBHOOK URL
-    const WEBHOOK_URL = 'https://n8n.fiorsaoirse.com/webhook/fca-content-images';
+  <div class="saved-indicator" id="savedIndicator">
+    <i class="fas fa-check-circle"></i> Form data saved
+  </div>
 
-    // Platform selection toggle
-    document.querySelectorAll('.checkbox-item').forEach(item => {
-      item.addEventListener('click', function(e) {
-        if (e.target.tagName !== 'INPUT') {
-          const checkbox = this.querySelector('input');
-          checkbox.checked = !checkbox.checked;
-        }
-        this.classList.toggle('selected', this.querySelector('input').checked);
-      });
+  <script>
+    // WEBHOOK URL - Change this for production
+    const WEBHOOK_URL = 'https://n8n.fiorsaoirse.com/webhook/fca-content-images';
+    const STORAGE_KEY = 'fca_form_data';
+
+    // Fields to save (exclude sensitive data if needed)
+    const fieldsToSave = [
+      'email', 'businessName', 'name', 'title', 'website', 'instagram_handle', 'location',
+      'theme', 'specialty', 'usp', 'audience', 'tone', 'services', 'cta', 'hashtagStyle',
+      'brandedHashtags', 'promotions', 'avoidTopics', 'notes',
+      'includeImages', 'preferOwnPhotos'
+    ];
+    const platformsToSave = ['instagram', 'facebook', 'linkedin', 'twitter'];
+
+    // Load saved data on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      loadSavedData();
+      setupAutoSave();
+      setupPlatformSelection();
     });
+
+    function loadSavedData() {
+      const savedData = localStorage.getItem(STORAGE_KEY);
+      if (!savedData) return;
+      
+      try {
+        const data = JSON.parse(savedData);
+        
+        // Load text/select fields
+        fieldsToSave.forEach(field => {
+          const element = document.getElementById(field);
+          if (element && data[field] !== undefined) {
+            if (element.type === 'checkbox') {
+              element.checked = data[field];
+            } else {
+              element.value = data[field];
+            }
+          }
+        });
+        
+        // Load platforms and their counts
+        if (data.platformCounts) {
+          Object.keys(data.platformCounts).forEach(platform => {
+            const count = data.platformCounts[platform];
+            if (count > 0) {
+              // Check the platform
+              const checkbox = document.getElementById(`platform-${platform}`);
+              if (checkbox && !checkbox.disabled) {
+                checkbox.checked = true;
+                checkbox.closest('.platform-select-item').classList.add('selected');
+                
+                // Set the count
+                const countInput = document.querySelector(`input[name="${platform}_count"]`);
+                if (countInput) countInput.value = count;
+                
+                // Update the count buttons
+                const item = checkbox.closest('.platform-select-item');
+                item.querySelectorAll('.count-btn').forEach(btn => {
+                  btn.classList.toggle('selected', btn.dataset.count === String(count));
+                });
+              }
+            }
+          });
+        }
+        
+      } catch (e) {
+        console.error('Error loading saved data:', e);
+      }
+    }
+
+    function saveFormData() {
+      const data = {};
+      
+      // Save text/select fields
+      fieldsToSave.forEach(field => {
+        const element = document.getElementById(field);
+        if (element) {
+          if (element.type === 'checkbox') {
+            data[field] = element.checked;
+          } else {
+            data[field] = element.value;
+          }
+        }
+      });
+      
+      // Save platforms with their counts
+      data.platformCounts = {};
+      platformsToSave.forEach(platform => {
+        const checkbox = document.getElementById(`platform-${platform}`);
+        const countInput = document.querySelector(`input[name="${platform}_count"]`);
+        if (checkbox && checkbox.checked && countInput) {
+          data.platformCounts[platform] = parseInt(countInput.value) || 2;
+        } else {
+          data.platformCounts[platform] = 0;
+        }
+      });
+      
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      showSavedIndicator();
+    }
+
+    function setupAutoSave() {
+      // Save on input change
+      document.querySelectorAll('input, select, textarea').forEach(element => {
+        element.addEventListener('change', saveFormData);
+        if (element.tagName === 'INPUT' && element.type === 'text') {
+          element.addEventListener('input', debounce(saveFormData, 1000));
+        }
+      });
+    }
+
+    function setupPlatformSelection() {
+      // Platform header click (checkbox toggle)
+      document.querySelectorAll('.platform-select-item:not(.disabled) .platform-header').forEach(header => {
+        header.addEventListener('click', function(e) {
+          const item = this.closest('.platform-select-item');
+          const checkbox = item.querySelector('input[type="checkbox"]');
+          
+          // Toggle checkbox if click wasn't directly on checkbox
+          if (e.target.type !== 'checkbox') {
+            checkbox.checked = !checkbox.checked;
+          }
+          
+          item.classList.toggle('selected', checkbox.checked);
+          saveFormData();
+        });
+      });
+      
+      // Count button clicks
+      document.querySelectorAll('.platform-select-item:not(.disabled) .count-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const item = this.closest('.platform-select-item');
+          const platform = item.dataset.platform;
+          const countInput = document.querySelector(`input[name="${platform}_count"]`);
+          
+          // Update selection
+          item.querySelectorAll('.count-btn').forEach(b => b.classList.remove('selected'));
+          this.classList.add('selected');
+          
+          // Update hidden input
+          if (countInput) countInput.value = this.dataset.count;
+          
+          // Auto-select platform if not already selected
+          const checkbox = item.querySelector('input[type="checkbox"]');
+          if (!checkbox.checked) {
+            checkbox.checked = true;
+            item.classList.add('selected');
+          }
+          
+          saveFormData();
+        });
+      });
+    }
+
+    function showSavedIndicator() {
+      const indicator = document.getElementById('savedIndicator');
+      indicator.classList.add('show');
+      setTimeout(() => indicator.classList.remove('show'), 2000);
+    }
+
+    function debounce(func, wait) {
+      let timeout;
+      return function executedFunction(...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    }
+
+    function clearSavedData() {
+      if (confirm('This will clear all saved form data. Continue?')) {
+        localStorage.removeItem(STORAGE_KEY);
+        location.reload();
+      }
+    }
+
+    function resetForm() {
+      document.getElementById('contentForm').style.display = 'block';
+      document.getElementById('success').style.display = 'none';
+    }
 
     // Form submission
     document.getElementById('contentForm').addEventListener('submit', async function(e) {
@@ -170,9 +660,20 @@
       const errorDiv = document.getElementById('error');
       const successDiv = document.getElementById('success');
       
-      // Get selected platforms
-      const platforms = Array.from(document.querySelectorAll('input[name="platforms"]:checked'))
-        .map(cb => cb.value);
+      // Get selected platforms with their counts
+      const platformCounts = {};
+      const platforms = [];
+      
+      document.querySelectorAll('.platform-select-item:not(.disabled)').forEach(item => {
+        const checkbox = item.querySelector('input[type="checkbox"]');
+        const platform = item.dataset.platform;
+        const countInput = document.querySelector(`input[name="${platform}_count"]`);
+        
+        if (checkbox && checkbox.checked) {
+          platforms.push(platform);
+          platformCounts[platform] = parseInt(countInput?.value) || 2;
+        }
+      });
       
       if (platforms.length === 0) {
         errorDiv.textContent = 'Please select at least one platform';
@@ -189,19 +690,46 @@
 
       // Disable button and show loading
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Generating Content...';
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating Content...';
       errorDiv.style.display = 'none';
 
-      // Build form data
+      // Build comprehensive form data
       const formData = {
+        // Basic info
         email: email,
+        businessName: document.getElementById('businessName').value,
+        name: document.getElementById('name').value,
+        title: document.getElementById('title').value,
+        website: document.getElementById('website').value,
+        instagram_handle: document.getElementById('instagram_handle').value,
+        location: document.getElementById('location').value,
+        
+        // Platforms with individual counts
         platforms: platforms,
+        platformCounts: platformCounts,
+        
+        // Image preferences
+        includeImages: document.getElementById('includeImages').checked,
+        preferOwnPhotos: document.getElementById('preferOwnPhotos').checked,
+        
+        // Content details
         theme: document.getElementById('theme').value,
+        specialty: document.getElementById('specialty').value,
+        usp: document.getElementById('usp').value,
         audience: document.getElementById('audience').value,
         tone: document.getElementById('tone').value,
-        specialty: document.getElementById('specialty').value,
+        services: document.getElementById('services').value,
         cta: document.getElementById('cta').value,
-        notes: document.getElementById('notes').value
+        hashtagStyle: document.getElementById('hashtagStyle').value,
+        brandedHashtags: document.getElementById('brandedHashtags').value,
+        
+        // Additional context
+        promotions: document.getElementById('promotions').value,
+        avoidTopics: document.getElementById('avoidTopics').value,
+        notes: document.getElementById('notes').value,
+        
+        // Metadata
+        submittedAt: new Date().toISOString()
       };
 
       try {
@@ -224,7 +752,7 @@
         errorDiv.textContent = error.message;
         errorDiv.style.display = 'block';
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Generate My Content 🚀';
+        submitBtn.innerHTML = '<i class="fas fa-rocket"></i> Generate My Content';
       }
     });
   </script>
