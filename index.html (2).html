@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FCA Content Request - TEST</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%); min-height: 100vh; padding: 20px; }
+    .container { max-width: 600px; margin: 0 auto; }
+    .test-banner { background: #f59e0b; color: #000; padding: 10px 20px; border-radius: 8px; text-align: center; margin-bottom: 20px; font-weight: 600; }
+    .card { background: white; border-radius: 16px; padding: 40px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+    .header { text-align: center; margin-bottom: 30px; }
+    .header h1 { color: #1e3a5f; font-size: 28px; margin-bottom: 8px; }
+    .header p { color: #64748b; }
+    .form-group { margin-bottom: 24px; }
+    label { display: block; font-weight: 600; color: #1e293b; margin-bottom: 8px; }
+    .required { color: #ef4444; }
+    input[type="email"], input[type="text"], textarea, select { width: 100%; padding: 14px 16px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 16px; transition: border-color 0.2s; }
+    input:focus, textarea:focus, select:focus { outline: none; border-color: #3b82f6; }
+    textarea { resize: vertical; min-height: 100px; }
+    .checkbox-group { display: flex; flex-wrap: wrap; gap: 12px; }
+    .checkbox-item { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 10px; cursor: pointer; transition: all 0.2s; }
+    .checkbox-item:hover { border-color: #3b82f6; background: #f8fafc; }
+    .checkbox-item.selected { border-color: #3b82f6; background: #dbeafe; }
+    .checkbox-item input { display: none; }
+    .platform-icon { font-size: 20px; }
+    button { width: 100%; padding: 16px; background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%); color: white; border: none; border-radius: 10px; font-size: 18px; font-weight: 600; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+    button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4); }
+    button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .success { background: #dcfce7; color: #166534; padding: 20px; border-radius: 10px; text-align: center; display: none; }
+    .error { background: #fee2e2; color: #dc2626; padding: 20px; border-radius: 10px; text-align: center; display: none; margin-bottom: 20px; }
+    .helper-text { font-size: 13px; color: #64748b; margin-top: 6px; }
+    .spam-notice { background: #fef3c7; padding: 12px 16px; border-radius: 8px; font-size: 14px; color: #92400e; margin-top: 16px; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="test-banner">⚠️ TEST FORM - New Image-Enabled Workflow</div>
+    
+    <div class="card">
+      <div class="header">
+        <h1>🎯 Request Your Content</h1>
+        <p>Fill out the form below to generate your personalized fitness content</p>
+      </div>
+
+      <div id="error" class="error"></div>
+
+      <form id="contentForm">
+        <div class="form-group">
+          <label>Email Address <span class="required">*</span></label>
+          <input type="email" name="email" id="email" required placeholder="your@email.com">
+        </div>
+
+        <div class="form-group">
+          <label>Select Platforms <span class="required">*</span></label>
+          <div class="checkbox-group">
+            <label class="checkbox-item" data-platform="instagram">
+              <input type="checkbox" name="platforms" value="instagram">
+              <span class="platform-icon">📸</span> Instagram
+            </label>
+            <label class="checkbox-item" data-platform="facebook">
+              <input type="checkbox" name="platforms" value="facebook">
+              <span class="platform-icon">👍</span> Facebook
+            </label>
+            <label class="checkbox-item" data-platform="linkedin">
+              <input type="checkbox" name="platforms" value="linkedin">
+              <span class="platform-icon">💼</span> LinkedIn
+            </label>
+            <label class="checkbox-item" data-platform="twitter">
+              <input type="checkbox" name="platforms" value="twitter">
+              <span class="platform-icon">🐦</span> Twitter/X
+            </label>
+            <label class="checkbox-item" data-platform="tiktok">
+              <input type="checkbox" name="platforms" value="tiktok">
+              <span class="platform-icon">🎵</span> TikTok
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Content Focus / Theme</label>
+          <input type="text" name="theme" id="theme" placeholder="e.g., Summer fitness motivation, Weight loss tips">
+          <p class="helper-text">Optional: Give us a specific theme or topic for this week's content</p>
+        </div>
+
+        <div class="form-group">
+          <label>Target Audience</label>
+          <select name="audience" id="audience">
+            <option value="general">General Fitness Enthusiasts</option>
+            <option value="beginners">Beginners / New to Fitness</option>
+            <option value="intermediate">Intermediate / Regular Gym-Goers</option>
+            <option value="advanced">Advanced / Athletes</option>
+            <option value="seniors">Seniors / 50+</option>
+            <option value="busy-professionals">Busy Professionals</option>
+            <option value="moms">Moms / Parents</option>
+            <option value="weight-loss">Weight Loss Focused</option>
+            <option value="muscle-building">Muscle Building / Bodybuilding</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Content Tone</label>
+          <select name="tone" id="tone">
+            <option value="motivational">Motivational & Inspiring</option>
+            <option value="educational">Educational & Informative</option>
+            <option value="casual">Casual & Friendly</option>
+            <option value="professional">Professional & Expert</option>
+            <option value="fun">Fun & Energetic</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Your Specialty / Niche</label>
+          <input type="text" name="specialty" id="specialty" placeholder="e.g., HIIT, Yoga, Strength Training, CrossFit">
+          <p class="helper-text">What type of fitness do you specialize in?</p>
+        </div>
+
+        <div class="form-group">
+          <label>Call-to-Action Preference</label>
+          <select name="cta" id="cta">
+            <option value="learn-more">Learn More (Link in Bio)</option>
+            <option value="dm">DM for Info</option>
+            <option value="book">Book a Session</option>
+            <option value="free-trial">Free Trial Offer</option>
+            <option value="none">No Direct CTA</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Additional Notes</label>
+          <textarea name="notes" id="notes" placeholder="Any specific requests, promotions, or events to mention?"></textarea>
+        </div>
+
+        <button type="submit" id="submitBtn">Generate My Content 🚀</button>
+
+        <div class="spam-notice">
+          📧 Please check your <strong>spam/junk folder</strong> if you don't see our email within a few minutes!
+        </div>
+      </form>
+
+      <div id="success" class="success">
+        <h3>✅ Content Request Submitted!</h3>
+        <p>We're generating your personalized content now. Check your email in a few minutes!</p>
+        <p style="margin-top: 10px; font-size: 14px;">Don't forget to check your spam folder!</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // CHANGE THIS TO YOUR TEST WEBHOOK URL
+    const WEBHOOK_URL = 'https://n8n.fiorsaoirse.com/webhook/fca-content-images';
+
+    // Platform selection toggle
+    document.querySelectorAll('.checkbox-item').forEach(item => {
+      item.addEventListener('click', function(e) {
+        if (e.target.tagName !== 'INPUT') {
+          const checkbox = this.querySelector('input');
+          checkbox.checked = !checkbox.checked;
+        }
+        this.classList.toggle('selected', this.querySelector('input').checked);
+      });
+    });
+
+    // Form submission
+    document.getElementById('contentForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const submitBtn = document.getElementById('submitBtn');
+      const errorDiv = document.getElementById('error');
+      const successDiv = document.getElementById('success');
+      
+      // Get selected platforms
+      const platforms = Array.from(document.querySelectorAll('input[name="platforms"]:checked'))
+        .map(cb => cb.value);
+      
+      if (platforms.length === 0) {
+        errorDiv.textContent = 'Please select at least one platform';
+        errorDiv.style.display = 'block';
+        return;
+      }
+
+      const email = document.getElementById('email').value;
+      if (!email) {
+        errorDiv.textContent = 'Please enter your email address';
+        errorDiv.style.display = 'block';
+        return;
+      }
+
+      // Disable button and show loading
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Generating Content...';
+      errorDiv.style.display = 'none';
+
+      // Build form data
+      const formData = {
+        email: email,
+        platforms: platforms,
+        theme: document.getElementById('theme').value,
+        audience: document.getElementById('audience').value,
+        tone: document.getElementById('tone').value,
+        specialty: document.getElementById('specialty').value,
+        cta: document.getElementById('cta').value,
+        notes: document.getElementById('notes').value
+      };
+
+      try {
+        const response = await fetch(WEBHOOK_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        });
+
+        if (response.ok) {
+          document.getElementById('contentForm').style.display = 'none';
+          successDiv.style.display = 'block';
+        } else {
+          const data = await response.json().catch(() => ({}));
+          throw new Error(data.message || 'Something went wrong. Please try again.');
+        }
+      } catch (error) {
+        errorDiv.textContent = error.message;
+        errorDiv.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Generate My Content 🚀';
+      }
+    });
+  </script>
+</body>
+</html>
