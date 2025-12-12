@@ -9,7 +9,6 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%); min-height: 100vh; padding: 20px; }
     .container { max-width: 700px; margin: 0 auto; }
-    .test-banner { background: #f59e0b; color: #000; padding: 10px 20px; border-radius: 8px; text-align: center; margin-bottom: 20px; font-weight: 600; }
     .card { background: white; border-radius: 16px; padding: 40px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
     .header { text-align: center; margin-bottom: 30px; }
     .header h1 { color: #1e3a5f; font-size: 28px; margin-bottom: 8px; }
@@ -34,7 +33,7 @@
     textarea { resize: vertical; min-height: 80px; }
     .helper-text { font-size: 13px; color: #64748b; margin-top: 6px; }
     
-    /* Platform selection with individual counts */
+    /* Platform selection with individual counts and image toggles */
     .platform-select-grid { display: flex; flex-direction: column; gap: 12px; }
     .platform-select-item { 
       border: 2px solid #e2e8f0; border-radius: 12px; 
@@ -62,9 +61,16 @@
       background: #f59e0b; color: #000; font-size: 10px; font-weight: 700;
       padding: 4px 10px; border-radius: 10px;
     }
+    
+    /* Platform options row */
+    .platform-options { 
+      display: flex; align-items: center; gap: 24px; 
+      margin-top: 12px; padding-top: 12px; border-top: 1px solid #e2e8f0;
+      flex-wrap: wrap;
+    }
+    
     .post-count-selector { 
       display: flex; align-items: center; gap: 12px; 
-      margin-top: 12px; padding-top: 12px; border-top: 1px solid #e2e8f0;
     }
     .count-label { font-size: 14px; color: #64748b; font-weight: 500; }
     .count-buttons { display: flex; gap: 6px; }
@@ -79,12 +85,32 @@
     }
     .count-btn:disabled { opacity: 0.3; cursor: not-allowed; }
     
-    /* Hide post count selector until platform is selected */
-    .platform-select-item:not(.selected) .post-count-selector { 
+    /* Platform image toggle */
+    .platform-image-toggle {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .platform-image-toggle .toggle-label-small {
+      font-size: 14px; color: #64748b; font-weight: 500;
+    }
+    .toggle-switch-small { position: relative; width: 44px; height: 24px; }
+    .toggle-switch-small input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider-small { 
+      position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #cbd5e1; transition: 0.3s; border-radius: 24px;
+    }
+    .toggle-slider-small:before {
+      position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px;
+      background-color: white; transition: 0.3s; border-radius: 50%;
+    }
+    .toggle-switch-small input:checked + .toggle-slider-small { background-color: #10b981; }
+    .toggle-switch-small input:checked + .toggle-slider-small:before { transform: translateX(20px); }
+    
+    /* Hide options until platform is selected */
+    .platform-select-item:not(.selected) .platform-options { 
       opacity: 0.4; pointer-events: none; 
     }
     
-    /* Toggle switch */
+    /* Toggle switch (for global options) */
     .toggle-group { display: flex; align-items: center; justify-content: space-between; padding: 16px; background: #f8fafc; border-radius: 10px; margin-bottom: 16px; }
     .toggle-label { font-weight: 600; color: #1e293b; }
     .toggle-description { font-size: 13px; color: #64748b; margin-top: 4px; }
@@ -102,21 +128,23 @@
     input:checked + .toggle-slider:before { transform: translateX(26px); }
     
     /* Buttons */
-    button { 
+    button[type="submit"] { 
       width: 100%; padding: 16px; 
       background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%); 
       color: white; border: none; border-radius: 10px; font-size: 18px; font-weight: 600; 
       cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; 
     }
-    button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4); }
-    button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    button[type="submit"]:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4); }
+    button[type="submit"]:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
     .btn-secondary { 
-      background: #f1f5f9; color: #475569; margin-top: 12px; font-size: 14px; padding: 12px;
+      width: 100%; background: #f1f5f9; color: #475569; margin-top: 12px; font-size: 14px; padding: 12px;
+      border: none; border-radius: 10px; cursor: pointer;
     }
-    .btn-secondary:hover { background: #e2e8f0; box-shadow: none; transform: none; }
+    .btn-secondary:hover { background: #e2e8f0; }
     
     .success { background: #dcfce7; color: #166534; padding: 24px; border-radius: 10px; text-align: center; display: none; }
     .success h3 { margin-bottom: 8px; }
+    .success button { background: #166534; margin-top: 20px; }
     .error { background: #fee2e2; color: #dc2626; padding: 16px; border-radius: 10px; text-align: center; display: none; margin-bottom: 20px; }
     .spam-notice { background: #fef3c7; padding: 12px 16px; border-radius: 8px; font-size: 14px; color: #92400e; margin-top: 16px; text-align: center; }
     
@@ -132,8 +160,6 @@
 </head>
 <body>
   <div class="container">
-    <div class="test-banner">⚠️ TEST FORM - New Image-Enabled Workflow</div>
-    
     <div class="card">
       <div class="header">
         <h1>🎯 Request Your Content</h1>
@@ -192,8 +218,8 @@
         <div class="form-section">
           <h2 class="section-title"><i class="fas fa-share-nodes"></i> Platforms & Posts</h2>
           
-          <label>Select Platforms & Number of Posts <span class="required">*</span></label>
-          <p class="helper-text" style="margin-bottom: 16px;">Click to select a platform, then choose how many posts you want</p>
+          <label>Select Platforms, Posts & Image Preferences <span class="required">*</span></label>
+          <p class="helper-text" style="margin-bottom: 16px;">Click to select a platform, choose post count, and toggle images on/off per platform</p>
           
           <div class="platform-select-grid">
             <!-- Instagram -->
@@ -203,16 +229,25 @@
                 <i class="fab fa-instagram platform-icon instagram"></i>
                 <span class="platform-name">Instagram</span>
               </div>
-              <div class="post-count-selector">
-                <span class="count-label">Posts:</span>
-                <div class="count-buttons">
-                  <button type="button" class="count-btn" data-count="1">1</button>
-                  <button type="button" class="count-btn selected" data-count="2">2</button>
-                  <button type="button" class="count-btn" data-count="3">3</button>
-                  <button type="button" class="count-btn" data-count="4">4</button>
-                  <button type="button" class="count-btn" data-count="5">5</button>
+              <div class="platform-options">
+                <div class="post-count-selector">
+                  <span class="count-label">Posts:</span>
+                  <div class="count-buttons">
+                    <button type="button" class="count-btn" data-count="1">1</button>
+                    <button type="button" class="count-btn selected" data-count="2">2</button>
+                    <button type="button" class="count-btn" data-count="3">3</button>
+                    <button type="button" class="count-btn" data-count="4">4</button>
+                    <button type="button" class="count-btn" data-count="5">5</button>
+                  </div>
+                  <input type="hidden" name="instagram_count" value="2">
                 </div>
-                <input type="hidden" name="instagram_count" value="2">
+                <div class="platform-image-toggle">
+                  <span class="toggle-label-small">Images:</span>
+                  <label class="toggle-switch-small">
+                    <input type="checkbox" name="instagram_images" id="instagram_images" checked>
+                    <span class="toggle-slider-small"></span>
+                  </label>
+                </div>
               </div>
             </div>
             
@@ -223,16 +258,25 @@
                 <i class="fab fa-facebook platform-icon facebook"></i>
                 <span class="platform-name">Facebook</span>
               </div>
-              <div class="post-count-selector">
-                <span class="count-label">Posts:</span>
-                <div class="count-buttons">
-                  <button type="button" class="count-btn" data-count="1">1</button>
-                  <button type="button" class="count-btn selected" data-count="2">2</button>
-                  <button type="button" class="count-btn" data-count="3">3</button>
-                  <button type="button" class="count-btn" data-count="4">4</button>
-                  <button type="button" class="count-btn" data-count="5">5</button>
+              <div class="platform-options">
+                <div class="post-count-selector">
+                  <span class="count-label">Posts:</span>
+                  <div class="count-buttons">
+                    <button type="button" class="count-btn" data-count="1">1</button>
+                    <button type="button" class="count-btn selected" data-count="2">2</button>
+                    <button type="button" class="count-btn" data-count="3">3</button>
+                    <button type="button" class="count-btn" data-count="4">4</button>
+                    <button type="button" class="count-btn" data-count="5">5</button>
+                  </div>
+                  <input type="hidden" name="facebook_count" value="2">
                 </div>
-                <input type="hidden" name="facebook_count" value="2">
+                <div class="platform-image-toggle">
+                  <span class="toggle-label-small">Images:</span>
+                  <label class="toggle-switch-small">
+                    <input type="checkbox" name="facebook_images" id="facebook_images" checked>
+                    <span class="toggle-slider-small"></span>
+                  </label>
+                </div>
               </div>
             </div>
             
@@ -243,16 +287,25 @@
                 <i class="fab fa-linkedin platform-icon linkedin"></i>
                 <span class="platform-name">LinkedIn</span>
               </div>
-              <div class="post-count-selector">
-                <span class="count-label">Posts:</span>
-                <div class="count-buttons">
-                  <button type="button" class="count-btn" data-count="1">1</button>
-                  <button type="button" class="count-btn selected" data-count="2">2</button>
-                  <button type="button" class="count-btn" data-count="3">3</button>
-                  <button type="button" class="count-btn" data-count="4">4</button>
-                  <button type="button" class="count-btn" data-count="5">5</button>
+              <div class="platform-options">
+                <div class="post-count-selector">
+                  <span class="count-label">Posts:</span>
+                  <div class="count-buttons">
+                    <button type="button" class="count-btn" data-count="1">1</button>
+                    <button type="button" class="count-btn selected" data-count="2">2</button>
+                    <button type="button" class="count-btn" data-count="3">3</button>
+                    <button type="button" class="count-btn" data-count="4">4</button>
+                    <button type="button" class="count-btn" data-count="5">5</button>
+                  </div>
+                  <input type="hidden" name="linkedin_count" value="2">
                 </div>
-                <input type="hidden" name="linkedin_count" value="2">
+                <div class="platform-image-toggle">
+                  <span class="toggle-label-small">Images:</span>
+                  <label class="toggle-switch-small">
+                    <input type="checkbox" name="linkedin_images" id="linkedin_images">
+                    <span class="toggle-slider-small"></span>
+                  </label>
+                </div>
               </div>
             </div>
             
@@ -263,16 +316,25 @@
                 <i class="fab fa-x-twitter platform-icon twitter"></i>
                 <span class="platform-name">X / Twitter</span>
               </div>
-              <div class="post-count-selector">
-                <span class="count-label">Posts:</span>
-                <div class="count-buttons">
-                  <button type="button" class="count-btn" data-count="1">1</button>
-                  <button type="button" class="count-btn selected" data-count="2">2</button>
-                  <button type="button" class="count-btn" data-count="3">3</button>
-                  <button type="button" class="count-btn" data-count="4">4</button>
-                  <button type="button" class="count-btn" data-count="5">5</button>
+              <div class="platform-options">
+                <div class="post-count-selector">
+                  <span class="count-label">Posts:</span>
+                  <div class="count-buttons">
+                    <button type="button" class="count-btn" data-count="1">1</button>
+                    <button type="button" class="count-btn selected" data-count="2">2</button>
+                    <button type="button" class="count-btn" data-count="3">3</button>
+                    <button type="button" class="count-btn" data-count="4">4</button>
+                    <button type="button" class="count-btn" data-count="5">5</button>
+                  </div>
+                  <input type="hidden" name="twitter_count" value="2">
                 </div>
-                <input type="hidden" name="twitter_count" value="2">
+                <div class="platform-image-toggle">
+                  <span class="toggle-label-small">Images:</span>
+                  <label class="toggle-switch-small">
+                    <input type="checkbox" name="twitter_images" id="twitter_images">
+                    <span class="toggle-slider-small"></span>
+                  </label>
+                </div>
               </div>
             </div>
             
@@ -284,40 +346,38 @@
                 <span class="platform-name">TikTok</span>
                 <span class="coming-soon">COMING SOON</span>
               </div>
-              <div class="post-count-selector">
-                <span class="count-label">Posts:</span>
-                <div class="count-buttons">
-                  <button type="button" class="count-btn" data-count="1" disabled>1</button>
-                  <button type="button" class="count-btn" data-count="2" disabled>2</button>
-                  <button type="button" class="count-btn" data-count="3" disabled>3</button>
-                  <button type="button" class="count-btn" data-count="4" disabled>4</button>
-                  <button type="button" class="count-btn" data-count="5" disabled>5</button>
+              <div class="platform-options">
+                <div class="post-count-selector">
+                  <span class="count-label">Posts:</span>
+                  <div class="count-buttons">
+                    <button type="button" class="count-btn" data-count="1" disabled>1</button>
+                    <button type="button" class="count-btn" data-count="2" disabled>2</button>
+                    <button type="button" class="count-btn" data-count="3" disabled>3</button>
+                    <button type="button" class="count-btn" data-count="4" disabled>4</button>
+                    <button type="button" class="count-btn" data-count="5" disabled>5</button>
+                  </div>
+                  <input type="hidden" name="tiktok_count" value="0">
                 </div>
-                <input type="hidden" name="tiktok_count" value="0">
+                <div class="platform-image-toggle">
+                  <span class="toggle-label-small">Images:</span>
+                  <label class="toggle-switch-small">
+                    <input type="checkbox" name="tiktok_images" id="tiktok_images" disabled>
+                    <span class="toggle-slider-small"></span>
+                  </label>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- SECTION: Image Preferences -->
+        <!-- SECTION: Image Preferences (Global) -->
         <div class="form-section">
-          <h2 class="section-title"><i class="fas fa-image"></i> Image Preferences</h2>
-          
-          <div class="toggle-group">
-            <div>
-              <div class="toggle-label">Include Images with Posts</div>
-              <div class="toggle-description">We'll match your uploaded photos or generate AI images</div>
-            </div>
-            <label class="toggle-switch">
-              <input type="checkbox" name="includeImages" id="includeImages" checked>
-              <span class="toggle-slider"></span>
-            </label>
-          </div>
+          <h2 class="section-title"><i class="fas fa-image"></i> Photo Preferences</h2>
           
           <div class="toggle-group">
             <div>
               <div class="toggle-label">Prefer My Own Photos</div>
-              <div class="toggle-description">Use photos from your uploaded library when available</div>
+              <div class="toggle-description">Use photos from your uploaded library when available, otherwise generate AI images</div>
             </div>
             <label class="toggle-switch">
               <input type="checkbox" name="preferOwnPhotos" id="preferOwnPhotos" checked>
@@ -457,7 +517,7 @@
         <p>We're generating your personalized content now.</p>
         <p style="margin-top: 12px;">Check your email in a few minutes!</p>
         <p style="margin-top: 8px; font-size: 14px; color: #166534;">Don't forget to check your spam folder.</p>
-        <button onclick="resetForm()" style="margin-top: 20px; background: #166534;">
+        <button type="button" onclick="resetForm()" style="margin-top: 20px; background: #166534;">
           <i class="fas fa-plus"></i> Submit Another Request
         </button>
       </div>
@@ -469,16 +529,15 @@
   </div>
 
   <script>
-    // WEBHOOK URL - Change this for production
+    // WEBHOOK URL
     const WEBHOOK_URL = 'https://n8n.fiorsaoirse.com/webhook/fca-content-images';
     const STORAGE_KEY = 'fca_form_data';
 
-    // Fields to save (exclude sensitive data if needed)
+    // Fields to save
     const fieldsToSave = [
       'email', 'businessName', 'name', 'title', 'website', 'instagram_handle', 'location',
       'theme', 'specialty', 'usp', 'audience', 'tone', 'services', 'cta', 'hashtagStyle',
-      'brandedHashtags', 'promotions', 'avoidTopics', 'notes',
-      'includeImages', 'preferOwnPhotos'
+      'brandedHashtags', 'promotions', 'avoidTopics', 'notes', 'preferOwnPhotos'
     ];
     const platformsToSave = ['instagram', 'facebook', 'linkedin', 'twitter'];
 
@@ -508,11 +567,11 @@
           }
         });
         
-        // Load platforms and their counts
-        if (data.platformCounts) {
-          Object.keys(data.platformCounts).forEach(platform => {
-            const count = data.platformCounts[platform];
-            if (count > 0) {
+        // Load platforms, counts, and image settings
+        if (data.platformSettings) {
+          Object.keys(data.platformSettings).forEach(platform => {
+            const settings = data.platformSettings[platform];
+            if (settings.enabled) {
               // Check the platform
               const checkbox = document.getElementById(`platform-${platform}`);
               if (checkbox && !checkbox.disabled) {
@@ -521,13 +580,17 @@
                 
                 // Set the count
                 const countInput = document.querySelector(`input[name="${platform}_count"]`);
-                if (countInput) countInput.value = count;
+                if (countInput) countInput.value = settings.count || 2;
                 
                 // Update the count buttons
                 const item = checkbox.closest('.platform-select-item');
                 item.querySelectorAll('.count-btn').forEach(btn => {
-                  btn.classList.toggle('selected', btn.dataset.count === String(count));
+                  btn.classList.toggle('selected', btn.dataset.count === String(settings.count || 2));
                 });
+                
+                // Set the image toggle
+                const imageToggle = document.getElementById(`${platform}_images`);
+                if (imageToggle) imageToggle.checked = settings.images !== false;
               }
             }
           });
@@ -553,16 +616,18 @@
         }
       });
       
-      // Save platforms with their counts
-      data.platformCounts = {};
+      // Save platform settings (enabled, count, images)
+      data.platformSettings = {};
       platformsToSave.forEach(platform => {
         const checkbox = document.getElementById(`platform-${platform}`);
         const countInput = document.querySelector(`input[name="${platform}_count"]`);
-        if (checkbox && checkbox.checked && countInput) {
-          data.platformCounts[platform] = parseInt(countInput.value) || 2;
-        } else {
-          data.platformCounts[platform] = 0;
-        }
+        const imageToggle = document.getElementById(`${platform}_images`);
+        
+        data.platformSettings[platform] = {
+          enabled: checkbox ? checkbox.checked : false,
+          count: countInput ? parseInt(countInput.value) || 2 : 2,
+          images: imageToggle ? imageToggle.checked : true
+        };
       });
       
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -570,7 +635,6 @@
     }
 
     function setupAutoSave() {
-      // Save on input change
       document.querySelectorAll('input, select, textarea').forEach(element => {
         element.addEventListener('change', saveFormData);
         if (element.tagName === 'INPUT' && element.type === 'text') {
@@ -584,9 +648,8 @@
       document.querySelectorAll('.platform-select-item:not(.disabled) .platform-header').forEach(header => {
         header.addEventListener('click', function(e) {
           const item = this.closest('.platform-select-item');
-          const checkbox = item.querySelector('input[type="checkbox"]');
+          const checkbox = item.querySelector('input[type="checkbox"][name="platforms"]');
           
-          // Toggle checkbox if click wasn't directly on checkbox
           if (e.target.type !== 'checkbox') {
             checkbox.checked = !checkbox.checked;
           }
@@ -603,15 +666,13 @@
           const platform = item.dataset.platform;
           const countInput = document.querySelector(`input[name="${platform}_count"]`);
           
-          // Update selection
           item.querySelectorAll('.count-btn').forEach(b => b.classList.remove('selected'));
           this.classList.add('selected');
           
-          // Update hidden input
           if (countInput) countInput.value = this.dataset.count;
           
-          // Auto-select platform if not already selected
-          const checkbox = item.querySelector('input[type="checkbox"]');
+          // Auto-select platform if not already
+          const checkbox = item.querySelector('input[type="checkbox"][name="platforms"]');
           if (!checkbox.checked) {
             checkbox.checked = true;
             item.classList.add('selected');
@@ -660,18 +721,21 @@
       const errorDiv = document.getElementById('error');
       const successDiv = document.getElementById('success');
       
-      // Get selected platforms with their counts
+      // Get selected platforms with counts and image settings
       const platformCounts = {};
+      const platformImages = {};
       const platforms = [];
       
       document.querySelectorAll('.platform-select-item:not(.disabled)').forEach(item => {
-        const checkbox = item.querySelector('input[type="checkbox"]');
+        const checkbox = item.querySelector('input[type="checkbox"][name="platforms"]');
         const platform = item.dataset.platform;
         const countInput = document.querySelector(`input[name="${platform}_count"]`);
+        const imageToggle = document.getElementById(`${platform}_images`);
         
         if (checkbox && checkbox.checked) {
           platforms.push(platform);
           platformCounts[platform] = parseInt(countInput?.value) || 2;
+          platformImages[platform] = imageToggle ? imageToggle.checked : true;
         }
       });
       
@@ -688,14 +752,14 @@
         return;
       }
 
-      // Disable button and show loading
       submitBtn.disabled = true;
       submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating Content...';
       errorDiv.style.display = 'none';
 
-      // Build comprehensive form data
+      // Check if ANY platform wants images
+      const includeImages = Object.values(platformImages).some(v => v === true);
+
       const formData = {
-        // Basic info
         email: email,
         businessName: document.getElementById('businessName').value,
         name: document.getElementById('name').value,
@@ -704,15 +768,13 @@
         instagram_handle: document.getElementById('instagram_handle').value,
         location: document.getElementById('location').value,
         
-        // Platforms with individual counts
         platforms: platforms,
         platformCounts: platformCounts,
+        platformImages: platformImages,  // NEW: per-platform image settings
         
-        // Image preferences
-        includeImages: document.getElementById('includeImages').checked,
+        includeImages: includeImages,  // true if ANY platform wants images
         preferOwnPhotos: document.getElementById('preferOwnPhotos').checked,
         
-        // Content details
         theme: document.getElementById('theme').value,
         specialty: document.getElementById('specialty').value,
         usp: document.getElementById('usp').value,
@@ -723,21 +785,17 @@
         hashtagStyle: document.getElementById('hashtagStyle').value,
         brandedHashtags: document.getElementById('brandedHashtags').value,
         
-        // Additional context
         promotions: document.getElementById('promotions').value,
         avoidTopics: document.getElementById('avoidTopics').value,
         notes: document.getElementById('notes').value,
         
-        // Metadata
         submittedAt: new Date().toISOString()
       };
 
       try {
         const response = await fetch(WEBHOOK_URL, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData)
         });
 
